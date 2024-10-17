@@ -5,6 +5,7 @@ NAMESPACE="default"
 MAX_AGE_MINUTES=15
 STATUS="Succeeded"
 STATUS_PATH=".status.phase"
+SLEEP_TIME_SECONDS=10
 
 # Positional arguments
 RESOURCE_TYPE="$1"
@@ -14,15 +15,19 @@ shift 2
 # Parse command-line options
 while getopts ":n:t:s:p:" opt; do
     case $opt in
-        n) NAMESPACE="$OPTARG" ;;
-        t) MAX_AGE_MINUTES="$OPTARG" ;;
-        s) STATUS="$OPTARG" ;;
-        p) STATUS_PATH="$OPTARG" ;;
-        \?) echo "Invalid option: -$OPTARG" >&2
-            echo "Usage: $0 <resource_type> <resource_name> [-n namespace] [-t max_age_minutes] [-s status] [-p status_path]"
-            exit 1 ;;
-        :) echo "Option -$OPTARG requires an argument." >&2
-           exit 1 ;;
+    n) NAMESPACE="$OPTARG" ;;
+    t) MAX_AGE_MINUTES="$OPTARG" ;;
+    s) STATUS="$OPTARG" ;;
+    p) STATUS_PATH="$OPTARG" ;;
+    \?)
+        echo "Invalid option: -$OPTARG" >&2
+        echo "Usage: $0 <resource_type> <resource_name> [-n namespace] [-t max_age_minutes] [-s status] [-p status_path]"
+        exit 1
+        ;;
+    :)
+        echo "Option -$OPTARG requires an argument." >&2
+        exit 1
+        ;;
     esac
 done
 
@@ -48,7 +53,8 @@ while true; do
 
     if [[ -z "$resource_info" ]]; then
         echo "Resource $RESOURCE_TYPE $RESOURCE_NAME not found in namespace $NAMESPACE."
-        exit 1
+        sleep $SLEEP_TIME_SECONDS
+        continue
     fi
 
     status=$(echo "$resource_info" | jq -r "$STATUS_PATH")
@@ -70,5 +76,5 @@ while true; do
         exit 1
     fi
 
-    sleep 10
+    sleep $SLEEP_TIME_SECONDS
 done
