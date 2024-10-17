@@ -54,7 +54,7 @@ while true; do
 
     if [[ -z "$resource_info" ]]; then
         time_elapsed_seconds=$((current_time - start_time))
-        echo "Resource $RESOURCE_TYPE $RESOURCE_NAME not found in namespace $NAMESPACE. Waited for $time_elapsed_seconds"
+        echo "Resource $RESOURCE_TYPE $RESOURCE_NAME not found in namespace $NAMESPACE. Waited for $time_elapsed_seconds seconds"
         if [[ "$time_elapsed_seconds" -gt "$MAX_AGE_SECONDS" ]]; then
             echo "Unable to found resource $RESOURCE_TYPE $RESOURCE_NAME after $MAX_AGE_MINUTES minutes."
             exit 1
