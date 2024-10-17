@@ -49,11 +49,13 @@ get_resource_info() {
 
 start_time=$(date +%s)
 while true; do
+    current_time=$(date +%s)
     resource_info=$(get_resource_info)
 
     if [[ -z "$resource_info" ]]; then
-        echo "Resource $RESOURCE_TYPE $RESOURCE_NAME not found in namespace $NAMESPACE."
-        if [[ "$resource_age_seconds" -gt "$MAX_AGE_SECONDS" ]]; then
+        time_elapsed_seconds=$((current_time - start_time))
+        echo "Resource $RESOURCE_TYPE $RESOURCE_NAME not found in namespace $NAMESPACE. Waited for $time_elapsed_seconds"
+        if [[ "$time_elapsed_seconds" -gt "$MAX_AGE_SECONDS" ]]; then
             echo "Unable to found resource $RESOURCE_TYPE $RESOURCE_NAME after $MAX_AGE_MINUTES minutes."
             exit 1
         fi
@@ -64,7 +66,6 @@ while true; do
     status=$(echo "$resource_info" | jq -r "$STATUS_PATH")
     creation_time=$(echo "$resource_info" | jq -r '.metadata.creationTimestamp')
 
-    current_time=$(date +%s)
     creation_time_seconds=$(date -d "$creation_time" +%s)
     resource_age_seconds=$((current_time - creation_time_seconds))
 
