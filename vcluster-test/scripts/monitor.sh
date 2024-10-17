@@ -2,7 +2,7 @@
 
 # Default values
 NAMESPACE="default"
-MAX_AGE_MINUTES=15
+MAX_AGE_MINUTES=5
 STATUS="Succeeded"
 STATUS_PATH=".status.phase"
 SLEEP_TIME_SECONDS=10
@@ -53,6 +53,10 @@ while true; do
 
     if [[ -z "$resource_info" ]]; then
         echo "Resource $RESOURCE_TYPE $RESOURCE_NAME not found in namespace $NAMESPACE."
+        if [[ "$resource_age_seconds" -gt "$MAX_AGE_SECONDS" ]]; then
+            echo "Unable to found resource $RESOURCE_TYPE $RESOURCE_NAME after $MAX_AGE_MINUTES minutes."
+            exit 1
+        fi
         sleep $SLEEP_TIME_SECONDS
         continue
     fi
