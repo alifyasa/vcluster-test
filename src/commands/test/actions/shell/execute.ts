@@ -6,7 +6,7 @@ import { $ } from "execa";
 const { logger } = useLogger();
 
 const shellExecuteSchema = z.object({
-  shellCommand: z.array(z.string()),
+  shellCommand: z.string().transform(str => str.split('\n')),
   env: z.record(z.string()).optional(),
 });
 
@@ -16,10 +16,11 @@ async function shellExecute(
   const input = shellExecuteSchema.parse(parameters);
   logger.info(`Executing ${JSON.stringify(input.shellCommand, null, 2)}`);
   for (const line of input.shellCommand) {
-    const execResult = await $(line, {
+    const execResult = await $(`${line}`, {
       env: {
         ...process.env,
-        ...input.env
+        ...input.env,
+        
       }
     });
     logger.info(execResult.stdout);
