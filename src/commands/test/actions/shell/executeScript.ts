@@ -20,7 +20,7 @@ async function shellExecuteScript(
   const scriptPath = path.join("/tmp", `${v4()}.sh`);
   await writeFile(scriptPath, input.script);
   await chmod(scriptPath, "755");
-  logger.info(`Executing ${input.script}`);
+  logger.info(`Executing Script\n${input.script}`);
   const execaResult = await execa(scriptPath, {
     shell: true,
     env: {
