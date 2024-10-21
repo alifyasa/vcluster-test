@@ -11,7 +11,7 @@ const vclusterSaveKubeconfigSchema = z.object({
   platformHost: urlWithoutTrailingSlash,
   projectId: z.string(),
   loftAccessKey: z.string(),
-  clusterId: z.string(),
+  vclusterId: z.string(),
   savePath: z.string().refine(
     (str) => {
       return path.isAbsolute(str);
@@ -26,7 +26,7 @@ async function vclusterSaveKubeconfig(
   const input = vclusterSaveKubeconfigSchema.parse(parameters);
   const options = {
     method: "POST",
-    url: `${input.platformHost}/kubernetes/management/apis/management.loft.sh/v1/namespaces/p-${input.projectId}/virtualclusterinstances/${input.clusterId}/kubeconfig`,
+    url: `${input.platformHost}/kubernetes/management/apis/management.loft.sh/v1/namespaces/p-${input.projectId}/virtualclusterinstances/${input.vclusterId}/kubeconfig`,
     params: { timeout: "180s" },
     headers: {
       "User-Agent":
@@ -34,7 +34,7 @@ async function vclusterSaveKubeconfig(
       Accept: "*/*",
       "Accept-Language": "en-US,en;q=0.5",
       "Accept-Encoding": "gzip, deflate, br, zstd",
-      Referer: `${input.platformHost}/projects/${input.projectId}/vclusters/${input.clusterId}/config?tab=inspect-resources`,
+      Referer: `${input.platformHost}/projects/${input.projectId}/vclusters/${input.vclusterId}/config?tab=inspect-resources`,
       authorization: `bearer ${input.loftAccessKey}`,
       "content-type": "application/json",
       "x-platform-client": "true",
