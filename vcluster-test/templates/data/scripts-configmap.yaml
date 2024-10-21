@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.data.scriptsConfigMap.name }}
-data:
-  monitor.sh: |-
-    {{- .Files.Get "scripts/monitor.sh" | nindent 4 }}

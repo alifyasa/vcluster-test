@@ -1,0 +1,22 @@
+name: "???"
+description: "???"
+defaults:
+  parameters:
+    platformHost: "???"
+    vclusterId: "???"
+    projectId: "???"
+    loftAccessKey: "???"
+    clusterId: "???"
+steps:
+  - name: "Create vCluster"
+    action: "vcluster/create"
+    parameters:
+      templateId: "???"
+  - name: "Wait vCluster to be Ready"
+    action: "vcluster/wait"
+    parameters:
+      waitUntilPhaseEquals: "???"
+      timeoutString: "???"
+      pollingIntervalMs: 300
+  - name: "Delete vCluster"
+    action: "vcluster/delete"
