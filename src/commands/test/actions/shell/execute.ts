@@ -7,7 +7,7 @@ const { logger } = useLogger();
 
 const shellExecuteSchema = z.object({
   shellCommand: z.array(z.string()),
-  env: z.record(z.string()),
+  env: z.record(z.string()).optional(),
 });
 
 async function shellExecute(
