@@ -14,7 +14,7 @@ async function shellExecute(
 ) {
     const input = shellExecuteSchema.parse(parameters)
     logger.info(`Executing ${input.shellCommand}`)
-    const execResult = await execaCommand(input.shellCommand)
+    const execResult = await execaCommand(`bash -c "${input.shellCommand.replace(/"/g, '\\"')}"`)
     logger.info(execResult.stdout)
     return execResult
 }
