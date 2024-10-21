@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { timeStringToMs, urlWithoutTrailingSlash } from "../../../../lib/types";
 import { TestActionParametersSchema } from "../../schema";
-import { vclusterList } from "./list";
 import { useLogger } from "../../../../lib/logger";
+import { vclusterGet } from "./get";
 
 const { logger } = useLogger();
 const vclusterWaitSchema = z.object({
@@ -32,14 +32,12 @@ async function vclusterWait(
 
   while (Date.now() < endTime) {
     try {
-      const response = await vclusterList({
+      const vcluster = await vclusterGet({
         platformHost,
         projectId,
         loftAccessKey,
+        vclusterId
       });
-      const vcluster = response.data.items.find(
-        (item: any) => item.metadata.name === vclusterId
-      );
 
       if (vcluster && vcluster.status.phase === waitUntilPhaseEquals) {
         logger.info(
