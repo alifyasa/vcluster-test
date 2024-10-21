@@ -9,10 +9,14 @@ const TestStepSchema = z.object({
   parameters: TestActionParametersSchema,
 });
 
+const TestStepSchemaWithCleanup = TestStepSchema.extend({
+  cleanupSteps: z.array(TestStepSchema)
+})
+
 const TestCommandSchema = z.object({
   name: z.string(),
   description: z.string(),
-  steps: z.array(TestStepSchema),
+  steps: z.array(TestStepSchemaWithCleanup),
   defaults: z.object({
     parameters: TestActionParametersSchema,
   }),
