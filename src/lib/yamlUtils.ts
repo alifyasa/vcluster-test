@@ -13,6 +13,17 @@ function yamlToJson(yamlString: string): object {
     }
 }
 
+function jsonToYaml(jsonString: string): string {
+    try {
+        const data = yaml.dump(jsonString);
+        return data;
+    } catch (error) {
+        logger.error('Error parsing JSON:', error);
+        throw error;
+    }
+}
+
 export {
-    yamlToJson
+    yamlToJson,
+    jsonToYaml
 }
