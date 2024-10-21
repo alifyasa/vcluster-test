@@ -1,4 +1,4 @@
-import { shellExecute } from "./shell/execute"
+import { shellExecuteScript } from "./shell/executeScript"
 import { vclusterCreate } from "./vcluster/create"
 import { vclusterDelete } from "./vcluster/delete"
 import { vclusterGet } from "./vcluster/get"
@@ -13,7 +13,7 @@ const TEST_ACTIONS = {
     "vcluster/list": vclusterList,
     "vcluster/wait": vclusterWait,
     "vcluster/saveKubeconfig": vclusterSaveKubeconfig,
-    "shell/execute": shellExecute
+    "shell/executeScript": shellExecuteScript
 }
 
 export {
