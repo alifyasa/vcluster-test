@@ -57,7 +57,7 @@ async function vclusterSaveKubeconfig(
   };
 
   const axiosResponse = await axios.request(options);
-  const kubeconfig: string = axiosResponse.data.status.kubeconfig;
+  const kubeconfig: string = axiosResponse.data.status.kubeConfig;
   writeFile(input.savePath, kubeconfig, (err) => {
     if (err) {
       logger.error("Error writing to file:", err);
