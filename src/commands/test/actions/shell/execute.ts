@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { TestActionParametersSchema } from "../../schema";
 import { useLogger } from "../../../../lib/logger";
-import { execaCommand } from "execa";
+import { execa } from "execa";
 
 const { logger } = useLogger();
 
@@ -14,7 +14,7 @@ async function shellExecute(
 ) {
     const input = shellExecuteSchema.parse(parameters)
     logger.info(`Executing ${input.shellCommand}`)
-    const execResult = await execaCommand(`bash -c "${input.shellCommand.replace(/"/g, '\\"')}"`)
+    const execResult = await execa("sh", ["-c", input.shellCommand])
     logger.info(execResult.stdout)
     return execResult
 }
