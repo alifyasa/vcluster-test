@@ -1,3 +1,4 @@
+import { shellExecute } from "./shell/execute"
 import { vclusterCreate } from "./vcluster/create"
 import { vclusterDelete } from "./vcluster/delete"
 import { vclusterList } from "./vcluster/list"
@@ -8,6 +9,7 @@ const TEST_ACTIONS = {
     "vcluster/delete": vclusterDelete,
     "vcluster/list": vclusterList,
     "vcluster/wait": vclusterWait,
+    "shell/execute": shellExecute
 }
 
 export {
