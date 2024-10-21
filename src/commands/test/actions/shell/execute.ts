@@ -14,7 +14,9 @@ async function shellExecute(
 ) {
     const input = shellExecuteSchema.parse(parameters)
     logger.info(`Executing ${input.shellCommand}`)
-    return await execa.execaCommand(input.shellCommand)
+    const execResult = await execa.execaCommand(input.shellCommand)
+    logger.info(execResult.stdout)
+    return execResult
 }
 
 export {
