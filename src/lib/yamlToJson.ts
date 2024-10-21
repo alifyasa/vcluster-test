@@ -1,5 +1,7 @@
 import * as yaml from 'js-yaml';
-import { logger } from '..';
+import { useLogger } from './logger';
+
+const { logger } = useLogger()
 
 function yamlToJson(yamlString: string): object {
     try {

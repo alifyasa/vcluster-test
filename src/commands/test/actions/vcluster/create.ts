@@ -2,7 +2,9 @@ import { z } from "zod";
 import { urlWithoutTrailingSlash } from "../../../../lib/types";
 import axios from "axios";
 import { TestActionParametersSchema } from "../../schema";
-import { logger } from "../../../..";
+import { useLogger } from "../../../../lib/logger";
+
+const { logger } = useLogger();
 
 const vclusterCreateSchema = z.object({
   platformHost: urlWithoutTrailingSlash,

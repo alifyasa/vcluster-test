@@ -2,8 +2,9 @@ import { z } from "zod";
 import { timeStringToMs, urlWithoutTrailingSlash } from "../../../../lib/types";
 import { TestActionParametersSchema } from "../../schema";
 import { vclusterList } from "./list";
-import { logger } from "../../../..";
+import { useLogger } from "../../../../lib/logger";
 
+const { logger } = useLogger();
 const vclusterWaitSchema = z.object({
   platformHost: urlWithoutTrailingSlash,
   projectId: z.string(),
@@ -14,7 +15,9 @@ const vclusterWaitSchema = z.object({
   pollingIntervalMs: z.number().min(100),
 });
 
-async function vclusterWait(parameters: z.infer<typeof TestActionParametersSchema>) {
+async function vclusterWait(
+  parameters: z.infer<typeof TestActionParametersSchema>
+) {
   const {
     platformHost,
     projectId,
@@ -32,7 +35,7 @@ async function vclusterWait(parameters: z.infer<typeof TestActionParametersSchem
       const response = await vclusterList({
         platformHost,
         projectId,
-        loftAccessKey
+        loftAccessKey,
       });
       const vcluster = response.data.items.find(
         (item: any) => item.metadata.name === vclusterId
@@ -44,9 +47,7 @@ async function vclusterWait(parameters: z.infer<typeof TestActionParametersSchem
         );
         return vcluster;
       }
-      logger.debug(
-        `VCluster ${vclusterId} is in phase: ${vcluster.status.phase}`
-      );
+      logger.debug(JSON.stringify(vcluster.status));
     } catch (error) {
       logger.error("Error fetching vCluster status:", error);
     }

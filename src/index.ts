@@ -2,17 +2,17 @@ import { Command } from "commander";
 import { PathLike, readFileSync, existsSync } from "fs";
 import { yamlToJson } from "./lib/yamlToJson";
 import { testUsingConfig } from "./commands";
-import { Logger } from "tslog";
+import { useLogger } from "./lib/logger";
 
 const program = new Command();
-export const logger = new Logger({
-  hideLogPositionForProduction: true,
-});
+const { logger, setLogger } = useLogger()
 
 program
   .name("vcluster-test")
   .description("vCluster Testing Tool")
   .version("0.1.0");
+
+program.option("-d, --debug", "Output debugging information.");
 
 program
   .command("test <config-file>")
@@ -36,3 +36,7 @@ program
   });
 
 program.parse(process.argv);
+const options = program.opts();
+setLogger({
+  minLevel: options.debug ? 2 : 3
+})

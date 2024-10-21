@@ -1,6 +1,8 @@
-import { logger } from "../..";
+import { useLogger } from "../../lib/logger";
 import { TEST_ACTIONS } from "./actions";
 import { TestCommandSchema } from "./schema";
+
+const { logger } = useLogger();
 
 async function testUsingConfig(config: object) {
   const commandConfig = TestCommandSchema.parse(config);
