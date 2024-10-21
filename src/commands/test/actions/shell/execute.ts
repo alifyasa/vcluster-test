@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { TestActionParametersSchema } from "../../schema";
 import { useLogger } from "../../../../lib/logger";
-import { execa } from "execa";
+import { $ } from "execa";
 
 const { logger } = useLogger();
 
@@ -16,7 +16,7 @@ async function shellExecute(
   const input = shellExecuteSchema.parse(parameters);
   logger.info(`Executing ${JSON.stringify(input.shellCommand, null, 2)}`);
   for (const line of input.shellCommand) {
-    const execResult = await execa(line, {
+    const execResult = await $(line, {
       env: {
         ...process.env,
         ...input.env
