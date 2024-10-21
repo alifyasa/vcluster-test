@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { PathLike, readFileSync, existsSync } from "fs";
-import { yamlToJson } from "./lib/yamlToJson";
+import { yamlToJson } from "./lib/yamlUtils";
 import { testUsingConfig } from "./commands";
 import { useLogger } from "./lib/logger";
 
