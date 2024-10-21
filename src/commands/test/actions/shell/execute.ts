@@ -6,19 +6,24 @@ import { execa } from "execa";
 const { logger } = useLogger();
 
 const shellExecuteSchema = z.object({
-  shellCommand: z.string(),
+  shellCommand: z.array(z.string()),
+  env: z.record(z.string()),
 });
 
 async function shellExecute(
   parameters: z.infer<typeof TestActionParametersSchema>
 ) {
-    const input = shellExecuteSchema.parse(parameters)
-    logger.info(`Executing ${input.shellCommand}`)
-    const execResult = await execa("sh", ["-c", input.shellCommand])
-    logger.info(execResult.stdout)
-    return execResult
+  const input = shellExecuteSchema.parse(parameters);
+  logger.info(`Executing ${JSON.stringify(input.shellCommand, null, 2)}`);
+  for (const line of input.shellCommand) {
+    const execResult = await execa(line, {
+      env: {
+        ...process.env,
+        ...input.env
+      }
+    });
+    logger.info(execResult.stdout);
+  }
 }
 
-export {
-    shellExecute
-}
+export { shellExecute };
