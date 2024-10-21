@@ -44,7 +44,7 @@ async function vclusterWait(parameters: z.infer<typeof TestActionParametersSchem
         );
         return vcluster;
       }
-      logger.info(
+      logger.debug(
         `VCluster ${vclusterId} is in phase: ${vcluster.status.phase}`
       );
     } catch (error) {
