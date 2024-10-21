@@ -1,22 +1,43 @@
-name: "???"
-description: "???"
+name: "vCluster Creation and Deletion Test"
+description: "Testfile to test vCluster creation and deletion."
 defaults:
   parameters:
-    platformHost: "???"
-    vclusterId: "???"
-    projectId: "???"
-    loftAccessKey: "???"
-    clusterId: "???"
+    platformHost: ""
+    clusterId: ""
+    vclusterId: ""
+    projectId: ""
+    loftAccessKey: ""
 steps:
   - name: "Create vCluster"
     action: "vcluster/create"
     parameters:
-      templateId: "???"
+      templateId: ""
+    cleanupSteps:
+      - name: "Delete vCluster"
+        action: "vcluster/delete"
   - name: "Wait vCluster to be Ready"
     action: "vcluster/wait"
     parameters:
-      waitUntilPhaseEquals: "???"
-      timeoutString: "???"
+      waitUntilPhaseEquals: "Ready"
+      timeoutString: "15m"
       pollingIntervalMs: 300
-  - name: "Delete vCluster"
-    action: "vcluster/delete"
+  - name: "Prepare Kubeconfig File"
+    action: "shell/executeScript"
+    parameters:
+      script: |
+        #!/bin/sh
+        rm -f /tmp/test-kubeconfig.yaml
+        touch /tmp/test-kubeconfig.yaml
+  - name: "Save Kubeconfig"
+    action: "vcluster/saveKubeconfig"
+    parameters:
+      savePath: "/tmp/test-kubeconfig.yaml"
+  - name: "Install Helm Charts"
+    action: "shell/executeScript"
+    parameters:
+      script: |
+        #!/bin/sh
+        chmod 600 $KUBECONFIG
+        helm install test-name /path/to/helm-charts
+      env:
+        KUBECONFIG: /tmp/test-kubeconfig.yaml
