@@ -1,0 +1,82 @@
+import { z } from "zod";
+import axios from "axios";
+import { urlWithoutTrailingSlash } from "lib/types";
+import { TestActionParametersSchema } from "commands/test/schema";
+import { logger } from "lib/logger";
+import { VirtualClusterInstanceList } from "lib/types/virtualClusterInstanceList";
+import { vclusterGet } from "commands/test/actions/vcluster/vcluster/get";
+
+const vclusterChangeTemplateSchema = z.object({
+  platformHost: urlWithoutTrailingSlash,
+  projectId: z.string(),
+  loftAccessKey: z.string(),
+  vclusterId: z.string(),
+  targetTemplateId: z.string(),
+});
+
+async function vclusterChangeTemplate(
+  parameters: z.infer<typeof TestActionParametersSchema>
+) {
+  const {
+    platformHost,
+    projectId,
+    loftAccessKey,
+    vclusterId,
+    targetTemplateId,
+  } = vclusterChangeTemplateSchema.parse(parameters);
+
+  const vcluster = await vclusterGet({
+    platformHost,
+    projectId,
+    loftAccessKey,
+    vclusterId,
+  });
+  if (!vcluster) {
+    throw new Error(
+      `Cannot find vCluster ${vclusterId} in project ${projectId}`
+    );
+  }
+  const oldTemplate = vcluster.spec.templateRef["name"];
+  vcluster.spec.templateRef["name"] = targetTemplateId;
+  vcluster.spec.templateRef["syncOnce"] = true;
+
+  const options = {
+    method: "PUT",
+    url: "https://3ud5fgc.loft.host/kubernetes/management/apis/management.loft.sh/v1/namespaces/p-substitute-default-project/virtualclusterinstances/alifyasa-test-cli",
+    params: { timeout: "180s" },
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0",
+      Accept: "*/*",
+      "Accept-Language": "en-US,en;q=0.5",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      Referer:
+        "https://3ud5fgc.loft.host/projects/substitute-default-project/vclusters",
+      authorization:
+        "bearer uigrogBxWhKulhXA9zZtUCnYMd8NqrFFwVSBCEZpdcdGpZLFgi4pXSHeUQxCxezd",
+      "content-type": "application/json",
+      "x-platform-client": "true",
+      "x-sleep-mode-ignore": "true",
+      Origin: "https://3ud5fgc.loft.host",
+      Connection: "keep-alive",
+      Cookie:
+        "loft_access_key=uigrogBxWhKulhXA9zZtUCnYMd8NqrFFwVSBCEZpdcdGpZLFgi4pXSHeUQxCxezd",
+      "Sec-Fetch-Dest": "empty",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Site": "same-origin",
+      Priority: "u=0",
+      TE: "trailers",
+    },
+    data: vcluster,
+  };
+  const axiosResponse = await axios.request(options);
+  logger.silly(JSON.stringify(axiosResponse, null, 2));
+  const vclusterTemplateChanged = axiosResponse.status === 200;
+  if (vclusterTemplateChanged)
+    logger.info(
+      `Successfully Changed vCluster template of ${vclusterId} in project ${projectId} from ${oldTemplate} to ${targetTemplateId}`
+    );
+  return vclusterTemplateChanged;
+}
+
+export { vclusterChangeTemplate };

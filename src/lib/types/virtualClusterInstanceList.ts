@@ -140,6 +140,7 @@ export interface Owner {
 
 export interface TemplateRef {
     name: string;
+    syncOnce: boolean | undefined
 }
 
 export interface StatusClass {
