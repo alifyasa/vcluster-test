@@ -42,7 +42,7 @@ async function vclusterChangeTemplate(
 
   const options = {
     method: "PUT",
-    url: "https://3ud5fgc.loft.host/kubernetes/management/apis/management.loft.sh/v1/namespaces/p-substitute-default-project/virtualclusterinstances/alifyasa-test-cli",
+    url: `${platformHost}/kubernetes/management/apis/management.loft.sh/v1/namespaces/p-${projectId}/virtualclusterinstances/${vclusterId}`,
     params: { timeout: "180s" },
     headers: {
       "User-Agent":
@@ -51,16 +51,16 @@ async function vclusterChangeTemplate(
       "Accept-Language": "en-US,en;q=0.5",
       "Accept-Encoding": "gzip, deflate, br, zstd",
       Referer:
-        "https://3ud5fgc.loft.host/projects/substitute-default-project/vclusters",
+        `${platformHost}/projects/${projectId}/vclusters`,
       authorization:
-        "bearer uigrogBxWhKulhXA9zZtUCnYMd8NqrFFwVSBCEZpdcdGpZLFgi4pXSHeUQxCxezd",
+        `bearer ${loftAccessKey}`,
       "content-type": "application/json",
       "x-platform-client": "true",
       "x-sleep-mode-ignore": "true",
-      Origin: "https://3ud5fgc.loft.host",
+      Origin: platformHost,
       Connection: "keep-alive",
       Cookie:
-        "loft_access_key=uigrogBxWhKulhXA9zZtUCnYMd8NqrFFwVSBCEZpdcdGpZLFgi4pXSHeUQxCxezd",
+        `loft_access_key=${loftAccessKey}`,
       "Sec-Fetch-Dest": "empty",
       "Sec-Fetch-Mode": "cors",
       "Sec-Fetch-Site": "same-origin",
