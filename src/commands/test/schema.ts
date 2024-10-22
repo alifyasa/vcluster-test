@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 import { TEST_ACTIONS } from "./actions";
 
 const TestActionParametersSchema = z.record(z.any()).optional();
@@ -10,8 +10,8 @@ const TestStepSchema = z.object({
 });
 
 const TestStepSchemaWithCleanup = TestStepSchema.extend({
-  cleanupSteps: z.array(TestStepSchema)
-})
+  cleanupSteps: z.array(TestStepSchema).optional().default([]),
+});
 
 const TestCommandSchema = z.object({
   name: z.string(),
@@ -22,8 +22,4 @@ const TestCommandSchema = z.object({
   }),
 });
 
-export {
-    TestCommandSchema,
-    TestStepSchema,
-    TestActionParametersSchema
-}
+export { TestCommandSchema, TestStepSchema, TestActionParametersSchema };
