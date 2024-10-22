@@ -77,14 +77,17 @@ async function vclusterChangeTemplate(
     );
     return true;
   } catch (e) {
-    const error = e as AxiosError;
-    throw new Error(
-      `Failed changing template for vCluster: ${JSON.stringify(
-        error.toJSON(),
-        null,
-        2
-      )}`
-    );
+    if (e instanceof AxiosError) {
+      throw new Error(
+        `Failed changing template for vCluster: ${JSON.stringify(
+          e.toJSON(),
+          null,
+          2
+        )}`
+      );
+    } else {
+      throw e
+    }
   }
 }
 
