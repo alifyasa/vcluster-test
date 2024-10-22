@@ -22,7 +22,8 @@ async function testUsingConfig(config: object) {
       logger.debug(JSON.stringify(rollbackSteps));
     }
     logger.info("Finished executing. Cleaning Up.");
-  } catch {
+  } catch (error) {
+    logger.error(error)
     logger.info("Encountered an error. Cleaning Up.");
   }
 
@@ -37,7 +38,8 @@ async function testUsingConfig(config: object) {
       });
     }
     logger.info("Finished cleaning up. Thank you.");
-  } catch {
+  } catch (error) {
+    logger.error(error)
     logger.info("Encountered an error. Stopping.");
   }
 }

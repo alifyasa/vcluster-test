@@ -44,9 +44,8 @@ async function vclusterWait(
         );
         return vcluster;
       }
-      logger.debug(JSON.stringify(vcluster));
     } catch (error) {
-      logger.error("Error fetching vCluster status:", error);
+      logger.error(error);
     }
 
     await new Promise((resolve) => setTimeout(resolve, pollingIntervalMs));

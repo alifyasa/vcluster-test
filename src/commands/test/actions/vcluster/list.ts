@@ -2,6 +2,9 @@ import { z } from "zod";
 import { urlWithoutTrailingSlash } from "../../../../lib/types";
 import axios from "axios";
 import { TestActionParametersSchema } from "../../schema";
+import { VirtualClusterInstanceList } from "../../../../lib/types/virtualClusterInstanceList";
+import { error } from "console";
+import { logger } from "../../../../lib/logger";
 
 const vclusterListSchema = z.object({
   platformHost: urlWithoutTrailingSlash,
@@ -37,7 +40,16 @@ async function vclusterList(
     },
   };
 
-  return await axios.request(options);
+  const axiosResponse = await axios.request(options);
+  logger.silly(JSON.stringify(axiosResponse, null, 2))
+  const requestSuccessful = axiosResponse.status === 200;
+  if (!requestSuccessful) {
+    throw new Error(
+      `vCluster List Request Failed: ${axiosResponse.status} ${axiosResponse.statusText}`
+    );
+  }
+  const vclusterInstanceList: VirtualClusterInstanceList = axiosResponse.data;
+  return vclusterInstanceList;
 }
 
 export { vclusterList };

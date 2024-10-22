@@ -17,20 +17,16 @@ async function vclusterGet(
 ) {
   const { platformHost, projectId, loftAccessKey, vclusterId } =
     vclusterGetSchema.parse(parameters);
-  try {
-    const response = await vclusterList({
-      platformHost,
-      projectId,
-      loftAccessKey,
-    });
-    const vcluster = response.data.items.find(
-      (item: any) => item.metadata.name === vclusterId
-    );
-    return vcluster;
-  } catch (error) {
-    logger.error("Error fetching vCluster status:", error);
-    throw new Error(`Error fetching vCluster status: ${error}`);
-  }
+  const response = await vclusterList({
+    platformHost,
+    projectId,
+    loftAccessKey,
+  });
+  const vcluster = response.items.find(
+    (item) => item.metadata.name === vclusterId
+  );
+  logger.silly(JSON.stringify(vcluster, null, 2))
+  return vcluster;
 }
 
 export { vclusterGet };

@@ -41,10 +41,13 @@ async function vclusterDelete(
   };
 
   const axiosResponse = await axios.request(options);
-  logger.info(
-    `Successfully Deleted vCluster ${input.vclusterId} in Project ${input.projectId}`
-  );
-  return axiosResponse;
+  logger.silly(JSON.stringify(axiosResponse, null, 2))
+  const vclusterDeleted = axiosResponse.status === 200;
+  if (vclusterDeleted)
+    logger.info(
+      `Successfully Deleted vCluster ${input.vclusterId} in Project ${input.projectId}`
+    );
+  return vclusterDeleted;
 }
 
 export { vclusterDelete };

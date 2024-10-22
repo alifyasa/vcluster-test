@@ -53,8 +53,13 @@ async function vclusterCreate(
   };
 
   const axiosResponse = await axios.request(options);
-  logger.info(`Successfully Created vCluster ${input.vclusterId} using Template ${input.templateId} in Project ${input.projectId}`)
-  return axiosResponse
+  logger.silly(JSON.stringify(axiosResponse, null, 2))
+  const vclusterCreated = axiosResponse.status === 200;
+  if (vclusterCreated)
+    logger.info(
+      `Successfully Created vCluster ${input.vclusterId} using Template ${input.templateId} in Project ${input.projectId}`
+    );
+  return vclusterCreated;
 }
 
 export { vclusterCreate };
