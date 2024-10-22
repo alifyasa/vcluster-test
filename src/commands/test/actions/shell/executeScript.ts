@@ -9,6 +9,7 @@ import { execa } from "execa";
 const shellExecuteScriptSchema = z.object({
   script: z.string().transform((script) => script.trim()),
   env: z.record(z.string()).optional(),
+  saveStdoutTo: z.string().optional(),
 });
 
 async function shellExecuteScript(
@@ -21,19 +22,26 @@ async function shellExecuteScript(
   logger.info(`Executing Script\n${input.script}`);
   const execaResult = await execa(scriptPath, {
     shell: true,
-    stdout: 'inherit',
+    stdout: "inherit",
     env: {
       ...process.env,
       ...input.env,
     },
   });
   if (execaResult.stdout) logger.info(execaResult.stdout);
+  if (input.saveStdoutTo) {
+    await writeFile(input.saveStdoutTo, execaResult.stdout || "");
+    logger.info(`Saved STDOUT to ${input.saveStdoutTo}`)
+  }
   if (execaResult.exitCode === -1) {
     logger.error(execaResult.stderr);
-    throw new Error(`Shell Execute exited with error code ${execaResult.exitCode}`)
+    throw new Error(
+      `Shell Execute exited with error code ${execaResult.exitCode}`
+    );
   }
   await unlink(scriptPath);
-  return execaResult
+
+  return execaResult;
 }
 
 export { shellExecuteScript };

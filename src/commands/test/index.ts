@@ -13,7 +13,7 @@ async function testUsingConfig(config: object) {
   let rollbackSteps: z.infer<typeof TestStepSchema>[] = [];
   try {
     for (const step of commandConfig.steps) {
-      logger.info(`Executing Step ${step.name} (${step.action})`);
+      logger.info(`Executing Step: ${step.name} (${step.action})`);
       await TEST_ACTIONS[step.action]({
         ...commandConfig.defaults.parameters,
         ...step.parameters,
