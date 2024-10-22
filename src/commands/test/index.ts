@@ -1,6 +1,7 @@
 import { TEST_ACTIONS } from "commands/test/actions";
 import { TestCommandSchema, TestStepSchema } from "commands/test/schema";
 import { logger } from "lib/logger";
+import { merge } from "lodash";
 import { z } from "zod";
 
 async function testUsingConfig(config: object) {
@@ -14,17 +15,18 @@ async function testUsingConfig(config: object) {
   try {
     for (const step of commandConfig.steps) {
       logger.info(`Executing Step: ${step.name} (${step.action})`);
-      await TEST_ACTIONS[step.action]({
-        ...commandConfig.defaults.parameters,
-        ...step.parameters,
-      });
+      const parameters = merge(
+        commandConfig.defaults.parameters,
+        step.parameters
+      );
+      await TEST_ACTIONS[step.action](parameters);
       rollbackSteps = [...step.cleanupSteps, ...rollbackSteps];
       logger.debug(JSON.stringify(rollbackSteps));
     }
     logger.info("Finished executing. Cleaning Up.");
   } catch (error) {
-    const err = error as Error
-    logger.error(err.message)
+    const err = error as Error;
+    logger.error(err.message);
     logger.info("Encountered an error. Cleaning Up.");
   }
 
@@ -33,14 +35,15 @@ async function testUsingConfig(config: object) {
       logger.info(
         `Executing Step ${rollbackStep.name} (${rollbackStep.action})`
       );
-      await TEST_ACTIONS[rollbackStep.action]({
-        ...commandConfig.defaults.parameters,
-        ...rollbackStep.parameters,
-      });
+      const parameters = merge(
+        commandConfig.defaults.parameters,
+        rollbackStep.parameters
+      );
+      await TEST_ACTIONS[rollbackStep.action](parameters);
     }
     logger.info("Finished cleaning up. Thank you.");
   } catch (error) {
-    logger.error(error)
+    logger.error(error);
     logger.info("Encountered an error. Stopping.");
   }
 }
