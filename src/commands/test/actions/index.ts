@@ -12,12 +12,12 @@ const TEST_ACTIONS = {
   "vcluster/vcluster/get": vclusterGet,
   "vcluster/vcluster/list": vclusterList,
   "vcluster/vcluster/wait": vclusterWait,
-  "vcluster/vcluster/saveKubeconfig": vclusterSaveKubeconfig,
+  "vcluster/vcluster/save-kubeconfig": vclusterSaveKubeconfig,
 
   "vcluster/template/create": () => {},
   "vcluster/template/delete": () => {},
 
-  "shell/executeScript": shellExecuteScript,
+  "shell/execute-script": shellExecuteScript,
 };
 
 export { TEST_ACTIONS };
