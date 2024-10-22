@@ -22,10 +22,9 @@ async function testUsingConfig(config: object) {
       });
       rollbackSteps = [...step.cleanupSteps, ...rollbackSteps];
     }
+    logger.info("Finished executing. Cleaning Up.");
   } catch {
     logger.info("Encountered an error. Cleaning Up.");
-  } finally {
-    logger.info("Finished executing. Cleaning Up.");
   }
 
   try {
@@ -38,10 +37,9 @@ async function testUsingConfig(config: object) {
         ...rollbackStep.parameters,
       });
     }
+    logger.info("Finished cleaning up. Thank you.");
   } catch {
     logger.info("Encountered an error. Stopping.");
-  } finally {
-    logger.info("Finished cleaning up. Thank you.");
   }
 }
 
