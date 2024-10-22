@@ -1,5 +1,5 @@
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { urlWithoutTrailingSlash } from "lib/types";
 import { TestActionParametersSchema } from "commands/test/schema";
 import { logger } from "lib/logger";
@@ -69,14 +69,23 @@ async function vclusterChangeTemplate(
     },
     data: vcluster,
   };
-  const axiosResponse = await axios.request(options);
-  logger.silly(JSON.stringify(axiosResponse, null, 2));
-  const vclusterTemplateChanged = axiosResponse.status === 200;
-  if (vclusterTemplateChanged)
+  try {
+    const axiosResponse = await axios.request(options);
+    logger.silly(JSON.stringify(axiosResponse, null, 2));
     logger.info(
       `Successfully Changed vCluster template of ${vclusterId} in project ${projectId} from ${oldTemplate} to ${targetTemplateId}`
     );
-  return vclusterTemplateChanged;
+    return true;
+  } catch (e) {
+    const error = e as AxiosError;
+    throw new Error(
+      `Failed changing template for vCluster: ${JSON.stringify(
+        error.toJSON(),
+        null,
+        2
+      )}`
+    );
+  }
 }
 
 export { vclusterChangeTemplate };

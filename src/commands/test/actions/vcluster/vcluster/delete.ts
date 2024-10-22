@@ -50,7 +50,9 @@ async function vclusterDelete(
     return true;
   } catch (e) {
     const error = e as AxiosError;
-    throw new Error(`Failed deleting vCluster: ${error.toJSON()}`);
+    throw new Error(
+      `Failed deleting vCluster: ${JSON.stringify(error.toJSON(), null, 2)}`
+    );
   }
 }
 

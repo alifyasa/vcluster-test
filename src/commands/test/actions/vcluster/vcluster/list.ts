@@ -47,7 +47,13 @@ async function vclusterList(
     return vclusterInstanceList;
   } catch (e) {
     const error = e as AxiosError;
-    throw new Error(`Failed getting List of vClusters: ${error.toJSON()}`);
+    throw new Error(
+      `Failed getting List of vClusters: ${JSON.stringify(
+        error.toJSON(),
+        null,
+        2
+      )}`
+    );
   }
 }
 

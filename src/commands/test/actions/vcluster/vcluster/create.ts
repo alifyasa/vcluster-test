@@ -62,7 +62,9 @@ async function vclusterCreate(
     return true;
   } catch (e) {
     const error = e as AxiosError;
-    throw new Error(`Failed creating vCluster: ${error.toJSON()}`);
+    throw new Error(
+      `Failed creating vCluster: ${JSON.stringify(error.toJSON(), null, 2)}`
+    );
   }
 }
 
