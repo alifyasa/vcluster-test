@@ -9,35 +9,36 @@ defaults:
     loftAccessKey: ""
 steps:
   - name: "Create vCluster"
-    action: "vcluster/create"
+    action: "vcluster/vcluster/create"
     parameters:
       templateId: ""
     cleanupSteps:
       - name: "Delete vCluster"
-        action: "vcluster/delete"
+        action: "vcluster/vcluster/delete"
   - name: "Wait vCluster to be Ready"
-    action: "vcluster/wait"
+    action: "vcluster/vcluster/wait"
     parameters:
       waitUntilPhaseEquals: "Ready"
       timeoutString: "15m"
       pollingIntervalMs: 300
   - name: "Prepare Kubeconfig File"
-    action: "shell/executeScript"
+    action: "shell/execute-script"
     parameters:
       script: |
         #!/bin/sh
         rm -f /tmp/test-kubeconfig.yaml
         touch /tmp/test-kubeconfig.yaml
   - name: "Save Kubeconfig"
-    action: "vcluster/saveKubeconfig"
+    action: "vcluster/vcluster/save-kubeconfig"
     parameters:
       savePath: "/tmp/test-kubeconfig.yaml"
   - name: "Install Helm Charts"
-    action: "shell/executeScript"
+    action: "shell/execute-script"
     parameters:
       script: |
         #!/bin/sh
         chmod 600 $KUBECONFIG
-        helm install test-name /path/to/helm-charts
+        kubectl get all
+        helm install chart-name /path/to/helm-charts
       env:
         KUBECONFIG: /tmp/test-kubeconfig.yaml
