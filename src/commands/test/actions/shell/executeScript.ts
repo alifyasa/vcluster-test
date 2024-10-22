@@ -27,7 +27,10 @@ async function shellExecuteScript(
     },
   });
   if (execaResult.stdout) logger.info(execaResult.stdout);
-  if (execaResult.stderr) logger.error(execaResult.stderr);
+  if (execaResult.exitCode === -1) {
+    logger.error(execaResult.stderr);
+    throw new Error(`Shell Execute exited with error code ${execaResult.exitCode}`)
+  }
   await unlink(scriptPath);
   return execaResult
 }
