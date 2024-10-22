@@ -31,6 +31,7 @@ async function vclusterGet(
     return vcluster;
   } catch (error) {
     logger.error("Error fetching vCluster status:", error);
+    throw new Error(`Error fetching vCluster status: ${error}`)
   }
 }
 

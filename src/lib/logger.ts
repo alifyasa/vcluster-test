@@ -22,4 +22,4 @@ function useLogger() {
   };
 }
 
-export { useLogger };
+export { useLogger, logger, setLogger };
