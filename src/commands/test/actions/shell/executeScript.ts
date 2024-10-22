@@ -1,15 +1,13 @@
 import { z } from "zod";
 import { TestActionParametersSchema } from "../../schema";
-import { useLogger } from "../../../../lib/logger";
+import { logger } from "../../../../lib/logger";
 import path from "path";
 import { v4 } from "uuid";
 import { chmod, unlink, writeFile } from "fs/promises";
 import { execa } from "execa";
 
-const { logger } = useLogger();
-
 const shellExecuteScriptSchema = z.object({
-  script: z.string().transform(script => script.trim()),
+  script: z.string().transform((script) => script.trim()),
   env: z.record(z.string()).optional(),
 });
 
@@ -28,9 +26,9 @@ async function shellExecuteScript(
       ...input.env,
     },
   });
-  if (execaResult.stdout) logger.info(execaResult.stdout)
-  if (execaResult.stderr) logger.info(execaResult.stderr)
-  await unlink(scriptPath)
+  if (execaResult.stdout) logger.info(execaResult.stdout);
+  if (execaResult.stderr) logger.info(execaResult.stderr);
+  await unlink(scriptPath);
 }
 
 export { shellExecuteScript };

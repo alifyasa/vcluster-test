@@ -3,7 +3,7 @@ import { urlWithoutTrailingSlash } from "../../../../lib/types";
 import axios from "axios";
 import { TestActionParametersSchema } from "../../schema";
 import { vclusterList } from "./list";
-import { useLogger } from "../../../../lib/logger";
+import { logger } from "../../../../lib/logger";
 
 const vclusterGetSchema = z.object({
   platformHost: urlWithoutTrailingSlash,
@@ -11,8 +11,6 @@ const vclusterGetSchema = z.object({
   loftAccessKey: z.string(),
   vclusterId: z.string(),
 });
-
-const { logger } = useLogger();
 
 async function vclusterGet(
   parameters: z.infer<typeof TestActionParametersSchema>
@@ -31,7 +29,7 @@ async function vclusterGet(
     return vcluster;
   } catch (error) {
     logger.error("Error fetching vCluster status:", error);
-    throw new Error(`Error fetching vCluster status: ${error}`)
+    throw new Error(`Error fetching vCluster status: ${error}`);
   }
 }
 

@@ -23,15 +23,12 @@ async function vclusterList(
       Accept: "*/*",
       "Accept-Language": "en-US,en;q=0.5",
       "Accept-Encoding": "gzip, deflate, br, zstd",
-      Referer:
-        `${input.platformHost}/projects/${input.projectId}/vclusters`,
-      authorization:
-        `bearer ${input.loftAccessKey}`,
+      Referer: `${input.platformHost}/projects/${input.projectId}/vclusters`,
+      authorization: `bearer ${input.loftAccessKey}`,
       "x-platform-client": "true",
       "x-sleep-mode-ignore": "true",
       Connection: "keep-alive",
-      Cookie:
-        `loft_access_key=${input.loftAccessKey}`,
+      Cookie: `loft_access_key=${input.loftAccessKey}`,
       "Sec-Fetch-Dest": "empty",
       "Sec-Fetch-Mode": "cors",
       "Sec-Fetch-Site": "same-origin",
@@ -40,7 +37,7 @@ async function vclusterList(
     },
   };
 
-  return await axios.request(options)
+  return await axios.request(options);
 }
 
 export { vclusterList };

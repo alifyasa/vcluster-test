@@ -4,9 +4,8 @@ import axios from "axios";
 import { TestActionParametersSchema } from "../../schema";
 import { writeFile } from "fs";
 import path from "path";
-import { useLogger } from "../../../../lib/logger";
+import { logger } from "../../../../lib/logger";
 
-const { logger } = useLogger();
 const vclusterSaveKubeconfigSchema = z.object({
   platformHost: urlWithoutTrailingSlash,
   projectId: z.string(),
@@ -68,6 +67,4 @@ async function vclusterSaveKubeconfig(
   return axiosResponse;
 }
 
-export {
-    vclusterSaveKubeconfig
-}
+export { vclusterSaveKubeconfig };

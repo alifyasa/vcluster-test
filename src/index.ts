@@ -2,10 +2,9 @@ import { Command } from "commander";
 import { PathLike, readFileSync, existsSync } from "fs";
 import { yamlToJson } from "./lib/yamlUtils";
 import { testUsingConfig } from "./commands";
-import { useLogger } from "./lib/logger";
+import { logger, setLogger } from "./lib/logger";
 
 const program = new Command();
-const { logger, setLogger } = useLogger()
 
 program
   .name("vcluster-test")

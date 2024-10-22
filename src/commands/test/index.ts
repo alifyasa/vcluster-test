@@ -1,9 +1,7 @@
 import { z } from "zod";
-import { useLogger } from "../../lib/logger";
+import { logger } from "../../lib/logger";
 import { TEST_ACTIONS } from "./actions";
 import { TestCommandSchema, TestStepSchema } from "./schema";
-
-const { logger } = useLogger();
 
 async function testUsingConfig(config: object) {
   const commandConfig = TestCommandSchema.parse(config);
@@ -21,7 +19,7 @@ async function testUsingConfig(config: object) {
         ...step.parameters,
       });
       rollbackSteps = [...step.cleanupSteps, ...rollbackSteps];
-      logger.debug(JSON.stringify(rollbackSteps))
+      logger.debug(JSON.stringify(rollbackSteps));
     }
     logger.info("Finished executing. Cleaning Up.");
   } catch {

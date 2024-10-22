@@ -2,9 +2,7 @@ import { z } from "zod";
 import { urlWithoutTrailingSlash } from "../../../../lib/types";
 import axios from "axios";
 import { TestActionParametersSchema } from "../../schema";
-import { useLogger } from "../../../../lib/logger";
-
-const { logger } = useLogger();
+import { logger } from "../../../../lib/logger";
 
 const vclusterDeleteSchema = z.object({
   platformHost: urlWithoutTrailingSlash,
@@ -43,8 +41,10 @@ async function vclusterDelete(
   };
 
   const axiosResponse = await axios.request(options);
-  logger.info(`Successfully Deleted vCluster ${input.vclusterId} in Project ${input.projectId}`)
-  return axiosResponse
+  logger.info(
+    `Successfully Deleted vCluster ${input.vclusterId} in Project ${input.projectId}`
+  );
+  return axiosResponse;
 }
 
 export { vclusterDelete };

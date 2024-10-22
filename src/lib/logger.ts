@@ -15,11 +15,4 @@ function setLogger(settings: ISettingsParam<unknown>) {
   logger.debug(`Set Logger with settings ${JSON.stringify(settings)}`);
 }
 
-function useLogger() {
-  return {
-    logger,
-    setLogger,
-  };
-}
-
-export { useLogger, logger, setLogger };
+export { logger, setLogger };

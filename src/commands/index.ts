@@ -1,5 +1,3 @@
 import { testUsingConfig } from "./test";
 
-export {
-    testUsingConfig
-}
+export { testUsingConfig };
