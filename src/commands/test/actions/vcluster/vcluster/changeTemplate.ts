@@ -71,7 +71,8 @@ async function vclusterChangeTemplate(
   };
   try {
     const axiosResponse = await axios.request(options);
-    logger.silly(JSON.stringify(axiosResponse, null, 2));
+    logger.silly(JSON.stringify(axiosResponse.headers, null, 2));
+    logger.silly(JSON.stringify(axiosResponse.data, null, 2));
     logger.info(
       `Successfully Changed vCluster template of ${vclusterId} in project ${projectId} from ${oldTemplate} to ${targetTemplateId}`
     );
