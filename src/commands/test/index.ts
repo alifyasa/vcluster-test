@@ -23,7 +23,8 @@ async function testUsingConfig(config: object) {
     }
     logger.info("Finished executing. Cleaning Up.");
   } catch (error) {
-    logger.error(error)
+    const err = error as Error
+    logger.error(err.message)
     logger.info("Encountered an error. Cleaning Up.");
   }
 
