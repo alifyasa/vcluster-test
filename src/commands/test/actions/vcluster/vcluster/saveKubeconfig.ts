@@ -1,10 +1,10 @@
 import { z } from "zod";
 import axios, { AxiosError } from "axios";
-import { writeFile } from "fs";
 import path from "path";
 import { urlWithoutTrailingSlash } from "lib/types";
 import { TestActionParametersSchema } from "commands/test/schema";
 import { logger } from "lib/logger";
+import { writeFile } from "fs/promises";
 
 const vclusterSaveKubeconfigSchema = z.object({
   platformHost: urlWithoutTrailingSlash,
@@ -67,13 +67,8 @@ async function vclusterSaveKubeconfig(
       `Error getting KubeConfig: ${JSON.stringify(error.toJSON(), null, 2)}`
     );
   }
-  writeFile(input.savePath, kubeconfig, (err) => {
-    if (err) {
-      throw new Error(`Error writing KubeConfig to file: ${err}`);
-    } else {
-      logger.info(`Kubeconfig written successfully to ${input.savePath}!`);
-    }
-  });
+  await writeFile(input.savePath, kubeconfig)
+  logger.info(`Kubeconfig written successfully to ${input.savePath}!`);
   return true;
 }
 
