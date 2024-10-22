@@ -1,5 +1,5 @@
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { urlWithoutTrailingSlash } from "lib/types";
 import { TestActionParametersSchema } from "commands/test/schema";
 import { logger } from "lib/logger";
@@ -39,17 +39,16 @@ async function vclusterList(
     },
   };
 
-  const axiosResponse = await axios.request(options);
-  logger.silly(JSON.stringify(axiosResponse.headers, null, 2))
-  logger.silly(JSON.stringify(axiosResponse.data, null, 2))
-  const requestSuccessful = axiosResponse.status === 200;
-  if (!requestSuccessful) {
-    throw new Error(
-      `vCluster List Request Failed: ${axiosResponse.status} ${axiosResponse.statusText}`
-    );
+  try {
+    const axiosResponse = await axios.request(options);
+    logger.silly(JSON.stringify(axiosResponse.headers, null, 2));
+    logger.silly(JSON.stringify(axiosResponse.data, null, 2));
+    const vclusterInstanceList: VirtualClusterInstanceList = axiosResponse.data;
+    return vclusterInstanceList;
+  } catch (e) {
+    const error = e as AxiosError;
+    throw new Error(`Failed getting List of vClusters: ${error.toJSON()}`);
   }
-  const vclusterInstanceList: VirtualClusterInstanceList = axiosResponse.data;
-  return vclusterInstanceList;
 }
 
 export { vclusterList };

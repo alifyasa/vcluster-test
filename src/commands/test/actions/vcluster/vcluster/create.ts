@@ -1,5 +1,5 @@
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { logger } from "lib/logger";
 import { TestActionParametersSchema } from "commands/test/schema";
 import { urlWithoutTrailingSlash } from "lib/types";
@@ -52,15 +52,18 @@ async function vclusterCreate(
     },
   };
 
-  const axiosResponse = await axios.request(options);
-  logger.silly(JSON.stringify(axiosResponse.headers, null, 2))
-  logger.silly(JSON.stringify(axiosResponse.data, null, 2))
-  const vclusterCreated = axiosResponse.status === 200;
-  if (vclusterCreated)
+  try {
+    const axiosResponse = await axios.request(options);
+    logger.silly(JSON.stringify(axiosResponse.headers, null, 2));
+    logger.silly(JSON.stringify(axiosResponse.data, null, 2));
     logger.info(
       `Successfully Created vCluster ${input.vclusterId} using Template ${input.templateId} in Project ${input.projectId}`
     );
-  return vclusterCreated;
+    return true;
+  } catch (e) {
+    const error = e as AxiosError;
+    throw new Error(`Failed creating vCluster: ${error.toJSON()}`);
+  }
 }
 
 export { vclusterCreate };

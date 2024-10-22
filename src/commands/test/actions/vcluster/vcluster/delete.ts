@@ -1,5 +1,5 @@
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { urlWithoutTrailingSlash } from "lib/types";
 import { TestActionParametersSchema } from "commands/test/schema";
 import { logger } from "lib/logger";
@@ -40,15 +40,18 @@ async function vclusterDelete(
     },
   };
 
-  const axiosResponse = await axios.request(options);
-  logger.silly(JSON.stringify(axiosResponse.headers, null, 2))
-  logger.silly(JSON.stringify(axiosResponse.data, null, 2))
-  const vclusterDeleted = axiosResponse.status === 200;
-  if (vclusterDeleted)
+  try {
+    const axiosResponse = await axios.request(options);
+    logger.silly(JSON.stringify(axiosResponse.headers, null, 2));
+    logger.silly(JSON.stringify(axiosResponse.data, null, 2));
     logger.info(
       `Successfully Deleted vCluster ${input.vclusterId} in Project ${input.projectId}`
     );
-  return vclusterDeleted;
+    return true;
+  } catch (e) {
+    const error = e as AxiosError;
+    throw new Error(`Failed deleting vCluster: ${error.toJSON()}`);
+  }
 }
 
 export { vclusterDelete };

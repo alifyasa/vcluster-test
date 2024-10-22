@@ -1,5 +1,5 @@
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { writeFile } from "fs";
 import path from "path";
 import { urlWithoutTrailingSlash } from "lib/types";
@@ -55,10 +55,16 @@ async function vclusterSaveKubeconfig(
     },
   };
 
-  const axiosResponse = await axios.request(options);
-  logger.silly(JSON.stringify(axiosResponse.headers, null, 2))
-  logger.silly(JSON.stringify(axiosResponse.data, null, 2))
-  const kubeconfig: string = axiosResponse.data.status.kubeConfig;
+  let kubeconfig: string
+  try {
+    const axiosResponse = await axios.request(options);
+    logger.silly(JSON.stringify(axiosResponse.headers, null, 2));
+    logger.silly(JSON.stringify(axiosResponse.data, null, 2));
+    kubeconfig = axiosResponse.data.status.kubeConfig;
+  } catch (e) {
+    const error = e as AxiosError;
+    throw new Error(`Error getting KubeConfig: ${error.toJSON()}`);
+  }
   writeFile(input.savePath, kubeconfig, (err) => {
     if (err) {
       throw new Error(`Error writing KubeConfig to file: ${err}`);
@@ -66,7 +72,7 @@ async function vclusterSaveKubeconfig(
       logger.info(`Kubeconfig written successfully to ${input.savePath}!`);
     }
   });
-  return axiosResponse;
+  return true;
 }
 
 export { vclusterSaveKubeconfig };
