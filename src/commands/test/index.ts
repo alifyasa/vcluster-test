@@ -21,6 +21,7 @@ async function testUsingConfig(config: object) {
         ...step.parameters,
       });
       rollbackSteps = [...step.cleanupSteps, ...rollbackSteps];
+      logger.debug(JSON.stringify(rollbackSteps))
     }
     logger.info("Finished executing. Cleaning Up.");
   } catch {
