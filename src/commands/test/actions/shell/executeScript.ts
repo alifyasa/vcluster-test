@@ -26,9 +26,8 @@ async function shellExecuteScript(
       ...input.env,
     },
   });
-  if (execaResult.stdout) logger.info(execaResult.stdout);
-  if (execaResult.stderr) logger.info(execaResult.stderr);
   await unlink(scriptPath);
+  return execaResult
 }
 
 export { shellExecuteScript };
