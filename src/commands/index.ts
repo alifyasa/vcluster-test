@@ -1,3 +1,3 @@
-import { testUsingConfig } from "./test";
+import { testUsingConfig } from "commands/test";
 
 export { testUsingConfig };

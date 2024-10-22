@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { urlWithoutTrailingSlash } from "../../../../lib/types";
 import axios from "axios";
-import { TestActionParametersSchema } from "../../schema";
 import { writeFile } from "fs";
 import path from "path";
-import { logger } from "../../../../lib/logger";
+import { urlWithoutTrailingSlash } from "lib/types";
+import { TestActionParametersSchema } from "commands/test/schema";
+import { logger } from "lib/logger";
 
 const vclusterSaveKubeconfigSchema = z.object({
   platformHost: urlWithoutTrailingSlash,

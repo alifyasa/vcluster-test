@@ -1,26 +1,24 @@
 import { z } from "zod";
-import { urlWithoutTrailingSlash } from "../../../../lib/types";
 import axios from "axios";
-import { TestActionParametersSchema } from "../../schema";
-import { logger } from "../../../../lib/logger";
+import { urlWithoutTrailingSlash } from "lib/types";
+import { TestActionParametersSchema } from "commands/test/schema";
+import { logger } from "lib/logger";
+import { VirtualClusterInstanceList } from "lib/types/virtualClusterInstanceList";
 
-const vclusterCreateSchema = z.object({
+const vclusterListSchema = z.object({
   platformHost: urlWithoutTrailingSlash,
   projectId: z.string(),
-  vclusterId: z.string(),
-  templateId: z.string(),
-  clusterId: z.string(),
   loftAccessKey: z.string(),
 });
 
-async function vclusterCreate(
+async function vclusterList(
   parameters: z.infer<typeof TestActionParametersSchema>
 ) {
-  const input = vclusterCreateSchema.parse(parameters);
+  const input = vclusterListSchema.parse(parameters);
   const options = {
-    method: "POST",
+    method: "GET",
     url: `${input.platformHost}/kubernetes/management/apis/management.loft.sh/v1/namespaces/p-${input.projectId}/virtualclusterinstances`,
-    params: { timeout: "180s" },
+    params: { extended: "true" },
     headers: {
       "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0",
@@ -29,37 +27,28 @@ async function vclusterCreate(
       "Accept-Encoding": "gzip, deflate, br, zstd",
       Referer: `${input.platformHost}/projects/${input.projectId}/vclusters`,
       authorization: `bearer ${input.loftAccessKey}`,
-      "content-type": "application/json",
       "x-platform-client": "true",
       "x-sleep-mode-ignore": "true",
-      Origin: `${input.platformHost}`,
       Connection: "keep-alive",
       Cookie: `loft_access_key=${input.loftAccessKey}`,
       "Sec-Fetch-Dest": "empty",
       "Sec-Fetch-Mode": "cors",
       "Sec-Fetch-Site": "same-origin",
-      Priority: "u=0",
+      Priority: "u=4",
       TE: "trailers",
-    },
-    data: {
-      apiVersion: "management.loft.sh/v1",
-      kind: "VirtualClusterInstance",
-      metadata: { name: input.vclusterId },
-      spec: {
-        templateRef: { name: input.templateId },
-        clusterRef: { cluster: input.clusterId },
-      },
     },
   };
 
   const axiosResponse = await axios.request(options);
   logger.silly(JSON.stringify(axiosResponse, null, 2))
-  const vclusterCreated = axiosResponse.status === 200;
-  if (vclusterCreated)
-    logger.info(
-      `Successfully Created vCluster ${input.vclusterId} using Template ${input.templateId} in Project ${input.projectId}`
+  const requestSuccessful = axiosResponse.status === 200;
+  if (!requestSuccessful) {
+    throw new Error(
+      `vCluster List Request Failed: ${axiosResponse.status} ${axiosResponse.statusText}`
     );
-  return vclusterCreated;
+  }
+  const vclusterInstanceList: VirtualClusterInstanceList = axiosResponse.data;
+  return vclusterInstanceList;
 }
 
-export { vclusterCreate };
+export { vclusterList };

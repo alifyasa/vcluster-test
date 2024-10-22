@@ -1,10 +1,10 @@
-import { shellExecuteScript } from "./shell/executeScript";
-import { vclusterCreate } from "./vcluster/create";
-import { vclusterDelete } from "./vcluster/delete";
-import { vclusterGet } from "./vcluster/get";
-import { vclusterList } from "./vcluster/list";
-import { vclusterSaveKubeconfig } from "./vcluster/saveKubeconfig";
-import { vclusterWait } from "./vcluster/wait";
+import { shellExecuteScript } from "commands/test/actions/shell/executeScript";
+import { vclusterCreate } from "commands/test/actions/vcluster/vcluster/create";
+import { vclusterDelete } from "commands/test/actions/vcluster/vcluster/delete";
+import { vclusterGet } from "commands/test/actions/vcluster/vcluster/get";
+import { vclusterList } from "commands/test/actions/vcluster/vcluster/list";
+import { vclusterSaveKubeconfig } from "commands/test/actions/vcluster/vcluster/saveKubeconfig";
+import { vclusterWait } from "commands/test/actions/vcluster/vcluster/wait";
 
 const TEST_ACTIONS = {
   "vcluster/vcluster/create": vclusterCreate,
@@ -13,6 +13,7 @@ const TEST_ACTIONS = {
   "vcluster/vcluster/list": vclusterList,
   "vcluster/vcluster/wait": vclusterWait,
   "vcluster/vcluster/save-kubeconfig": vclusterSaveKubeconfig,
+  "vcluster/vcluster/change-template": () => {},
 
   "vcluster/template/create": () => {},
   "vcluster/template/delete": () => {},

@@ -1,5 +1,5 @@
+import { TEST_ACTIONS } from "commands/test/actions";
 import { z } from "zod";
-import { TEST_ACTIONS } from "./actions";
 
 const TestActionParametersSchema = z.record(z.any()).optional();
 

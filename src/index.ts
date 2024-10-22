@@ -1,8 +1,8 @@
 import { Command } from "commander";
+import { testUsingConfig } from "commands";
 import { PathLike, readFileSync, existsSync } from "fs";
-import { yamlToJson } from "./lib/yamlUtils";
-import { testUsingConfig } from "./commands";
-import { logger, setLogger } from "./lib/logger";
+import { logger, setLogger } from "lib/logger";
+import { yamlToJson } from "lib/yamlUtils";
 
 const program = new Command();
 

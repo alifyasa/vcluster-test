@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { timeStringToMs, urlWithoutTrailingSlash } from "../../../../lib/types";
-import { TestActionParametersSchema } from "../../schema";
-import { logger } from "../../../../lib/logger";
-import { vclusterGet } from "./get";
+import { timeStringToMs, urlWithoutTrailingSlash } from "lib/types";
+import { TestActionParametersSchema } from "commands/test/schema";
+import { logger } from "lib/logger";
+import { vclusterGet } from "commands/test/actions/vcluster/vcluster/get";
 
 const vclusterWaitSchema = z.object({
   platformHost: urlWithoutTrailingSlash,

@@ -1,9 +1,8 @@
 import { z } from "zod";
-import { urlWithoutTrailingSlash } from "../../../../lib/types";
-import axios from "axios";
-import { TestActionParametersSchema } from "../../schema";
-import { vclusterList } from "./list";
-import { logger } from "../../../../lib/logger";
+import { urlWithoutTrailingSlash } from "lib/types";
+import { TestActionParametersSchema } from "commands/test/schema";
+import { vclusterList } from "commands/test/actions/vcluster/vcluster/list";
+import { logger } from "lib/logger";
 
 const vclusterGetSchema = z.object({
   platformHost: urlWithoutTrailingSlash,

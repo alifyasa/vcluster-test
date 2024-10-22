@@ -1,7 +1,7 @@
+import { TEST_ACTIONS } from "commands/test/actions";
+import { TestCommandSchema, TestStepSchema } from "commands/test/schema";
+import { logger } from "lib/logger";
 import { z } from "zod";
-import { logger } from "../../lib/logger";
-import { TEST_ACTIONS } from "./actions";
-import { TestCommandSchema, TestStepSchema } from "./schema";
 
 async function testUsingConfig(config: object) {
   const commandConfig = TestCommandSchema.parse(config);

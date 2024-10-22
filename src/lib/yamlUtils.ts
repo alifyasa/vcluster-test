@@ -1,5 +1,5 @@
 import * as yaml from "js-yaml";
-import { logger } from "./logger";
+import { logger } from "lib/logger";
 
 function yamlToJson(yamlString: string): object {
   try {
