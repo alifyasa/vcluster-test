@@ -41,7 +41,8 @@ async function vclusterDelete(
   };
 
   const axiosResponse = await axios.request(options);
-  logger.silly(JSON.stringify(axiosResponse, null, 2))
+  logger.silly(JSON.stringify(axiosResponse.headers, null, 2))
+  logger.silly(JSON.stringify(axiosResponse.data, null, 2))
   const vclusterDeleted = axiosResponse.status === 200;
   if (vclusterDeleted)
     logger.info(

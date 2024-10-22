@@ -40,7 +40,8 @@ async function vclusterList(
   };
 
   const axiosResponse = await axios.request(options);
-  logger.silly(JSON.stringify(axiosResponse, null, 2))
+  logger.silly(JSON.stringify(axiosResponse.headers, null, 2))
+  logger.silly(JSON.stringify(axiosResponse.data, null, 2))
   const requestSuccessful = axiosResponse.status === 200;
   if (!requestSuccessful) {
     throw new Error(

@@ -53,7 +53,8 @@ async function vclusterCreate(
   };
 
   const axiosResponse = await axios.request(options);
-  logger.silly(JSON.stringify(axiosResponse, null, 2))
+  logger.silly(JSON.stringify(axiosResponse.headers, null, 2))
+  logger.silly(JSON.stringify(axiosResponse.data, null, 2))
   const vclusterCreated = axiosResponse.status === 200;
   if (vclusterCreated)
     logger.info(
