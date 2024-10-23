@@ -9,8 +9,7 @@ import { z } from "zod";
 async function test(configPath: PathLike, valuesPath: PathLike | undefined) {
   try {
     const configContent = await compileConfig(configPath, valuesPath);
-    logger.info(`Loaded configuration from ${configPath}`);
-    logger.debug(JSON.stringify(configContent, null, 2));
+    logger.info(`Loaded configuration from ${configPath}\n${JSON.stringify(configContent, null, 2)}`);
     await testUsingConfig(configContent);
   } catch (e) {
     const error = e as Error;
