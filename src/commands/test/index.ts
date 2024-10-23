@@ -1,8 +1,23 @@
+import { compileConfig } from "commands/compile";
 import { TEST_ACTIONS } from "commands/test/actions";
 import { TestCommandSchema, TestStepSchema } from "commands/test/schema";
+import { PathLike } from "fs";
 import { logger } from "lib/logger";
 import { merge } from "lodash";
 import { z } from "zod";
+
+async function test(configPath: PathLike, valuesPath: PathLike | undefined) {
+  try {
+    const configContent = await compileConfig(configPath, valuesPath);
+    logger.info(`Loaded configuration from ${configPath}`);
+    logger.debug(JSON.stringify(configContent, null, 2));
+    await testUsingConfig(configContent);
+  } catch (e) {
+    const error = e as Error;
+    logger.error(error.message);
+    process.exit(1);
+  }
+};
 
 async function testUsingConfig(config: object) {
   const commandConfig = TestCommandSchema.parse(config);
@@ -48,4 +63,4 @@ async function testUsingConfig(config: object) {
   }
 }
 
-export { testUsingConfig };
+export { test };

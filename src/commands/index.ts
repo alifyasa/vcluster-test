@@ -1,3 +1,4 @@
-import { testUsingConfig } from "commands/test";
+import { test } from "commands/test";
+import { compile } from "commands/compile";
 
-export { testUsingConfig };
+export default { test, compile };

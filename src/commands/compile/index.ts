@@ -6,6 +6,17 @@ import { jsonToYaml, yamlToJson } from "lib/yamlUtils";
 import { customAlphabet } from "nanoid";
 import { v4 as uuidv4 } from "uuid";
 
+async function compile(configPath: PathLike, valuesPath: PathLike | undefined) {
+  try {
+    const configContent = await compileConfig(configPath, valuesPath)
+    logger.info(`Compiled Script\n${JSON.stringify(configContent, null, 2)}`);
+  } catch (e) {
+    const error = e as Error;
+    logger.error(error.message);
+    process.exit(1);
+  }
+}
+
 function createHandlebarsInstance(): typeof Handlebars {
   const handlebarsInstance = Handlebars.create();
 
@@ -80,4 +91,4 @@ async function compileConfig(
   return configContent;
 }
 
-export { compileConfig };
+export { compileConfig, compile };
