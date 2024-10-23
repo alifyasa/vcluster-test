@@ -3,7 +3,6 @@ import axios, { AxiosError } from "axios";
 import { urlWithoutTrailingSlash } from "lib/types";
 import { TestActionParametersSchema } from "commands/test/schema";
 import { logger } from "lib/logger";
-import { VirtualClusterInstanceList } from "lib/types/virtualClusterInstanceList";
 import { vclusterGet } from "commands/test/actions/vcluster/vcluster/get";
 
 const vclusterChangeTemplateSchema = z.object({
