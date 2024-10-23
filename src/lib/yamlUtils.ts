@@ -11,7 +11,7 @@ function yamlToJson(yamlString: string): Record<string, any> {
   }
 }
 
-function jsonToYaml(jsonString: string): string {
+function jsonToYaml(jsonString: Record<string, any>): string {
   try {
     const data = yaml.dump(jsonString);
     return data;
