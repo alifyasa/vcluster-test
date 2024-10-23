@@ -1,4 +1,5 @@
 *
 !.gitignore
-!examples/
-!examples/*
+!basic-test/
+!basic-test/*
+values.yaml

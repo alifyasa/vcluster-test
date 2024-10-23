@@ -1,0 +1,86 @@
+name: "Basic Test for vCluster v21.0.0-beta.5"
+description: "Basic Test for vCluster v21.0.0-beta.5"
+defaults:
+  parameters:
+    platformHost: "{{ hostCluster.platformHost }}"
+    clusterId: "{{ hostCluster.clusterId }}"
+    vclusterId: "{{ vcluster.vclusterId }}"
+    projectId: "{{ vcluster.projectId }}"
+    loftAccessKey: "{{ hostCluster.loftAccessKey }}"
+steps:
+  - name: "Create vCluster"
+    action: "vcluster/vcluster/create"
+    parameters:
+      templateId: "{{ vcluster.templateId }}"
+    cleanupSteps:
+      - name: "Delete vCluster"
+        action: "vcluster/vcluster/delete"
+  - name: "Wait vCluster to be Ready"
+    action: "vcluster/vcluster/wait"
+    parameters:
+      waitUntilPhaseEquals: "Ready"
+      timeoutString: "15m"
+      pollingIntervalMs: 300
+  - name: "Prepare Kubeconfig File"
+    action: "shell/execute-script"
+    parameters:
+      script: |
+        #!/bin/sh
+        rm -f {{ vcluster.kubeconfigPath }}
+        touch {{ vcluster.kubeconfigPath }}
+  - name: "Save Kubeconfig"
+    action: "vcluster/vcluster/save-kubeconfig"
+    parameters:
+      savePath: "{{ vcluster.kubeconfigPath }}"
+  - name: "Install Helm Charts"
+    action: "shell/execute-script"
+    parameters:
+      script: |
+        #!/bin/sh
+        chmod 600 $KUBECONFIG
+        echo $KUBECONFIG
+        helm install {{ helmChart.name }} {{ helmChart.path }}
+      env:
+        KUBECONFIG: "{{ vcluster.kubeconfigPath }}"
+    cleanupSteps:
+      - name: "Uninstall Helm Charts"
+        action: "shell/execute-script"
+        parameters:
+          script: |
+            #!/bin/sh
+            chmod 600 $KUBECONFIG
+            echo $KUBECONFIG
+            helm uninstall alifyasa-test-crd-beta-5
+          env:
+            KUBECONFIG: "{{ vcluster.kubeconfigPath }}"
+  - name: "Wait for the resources to be Ready"
+    action: "shell/execute-script"
+    parameters:
+      env:
+        TIMEOUT: 30s
+        NAMESPACE: default
+        SLEEP_TIME_SECONDS: 600
+        KUBECONFIG: "{{ vcluster.kubeconfigPath }}"
+      script: |
+        #!/bin/bash
+
+        sleep $SLEEP_TIME_SECONDS
+
+        kubectl wait --for=condition=Available deployment/deployment-type-1-x-basic-deploy -n $NAMESPACE --timeout=$TIMEOUT
+        kubectl wait --for=condition=Available deployment/deployment-type-2-x-basic-deploy -n $NAMESPACE --timeout=$TIMEOUT
+
+        kubectl wait --for=jsonpath='.subsets[*].addresses' endpoints/svc-type-1-x-basic-deploy -n $NAMESPACE --timeout=$TIMEOUT
+        kubectl wait --for=jsonpath='.subsets[*].addresses' endpoints/svc-type-2-x-basic-deploy -n $NAMESPACE --timeout=$TIMEOUT
+        kubectl wait --for=jsonpath='.subsets[*].addresses' endpoints/vm-service-x-kubevirt -n $NAMESPACE --timeout=$TIMEOUT
+
+        kubectl wait --for=jsonpath='.status.loadBalancer.ingress[0].ip' ingress/ingress -n $NAMESPACE --timeout=$TIMEOUT
+
+        kubectl wait --for=jsonpath='.status.phase'=Bound pvc/vm-dv-extra-pvc-x-kubevirt -n $NAMESPACE --timeout=$TIMEOUT
+        kubectl wait --for=jsonpath='.status.phase'=Bound pvc/vm-dv-extra-x-kubevirt -n $NAMESPACE --timeout=$TIMEOUT
+        kubectl wait --for=jsonpath='.status.phase'=Bound pvc/vm-dv-x-kubevirt -n $NAMESPACE --timeout=$TIMEOUT
+
+        kubectl wait --for=condition=Ready dv/vm-dv-x-kubevirt -n $NAMESPACE --timeout=$TIMEOUT
+        kubectl wait --for=condition=Ready dv/vm-dv-extra-x-kubevirt -n $NAMESPACE --timeout=$TIMEOUT
+
+        kubectl wait --for=condition=Ready vm/vm-x-kubevirt -n $NAMESPACE --timeout=$TIMEOUT
+        kubectl wait --for=condition=Ready vmi/vm-x-kubevirt -n $NAMESPACE --timeout=$TIMEOUT
