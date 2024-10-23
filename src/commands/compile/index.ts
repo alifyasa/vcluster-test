@@ -6,9 +6,7 @@ function createHandlebarsInstance(): typeof Handlebars {
   const handlebarsInstance = Handlebars.create();
 
   handlebarsInstance.registerHelper("uuidv4", () => uuidv4());
-  handlebarsInstance.registerHelper("nanoid", () =>
-    customAlphabet(urlAlphabet, 8)
-  );
+  handlebarsInstance.registerHelper("nanoid", customAlphabet(urlAlphabet, 8));
   handlebarsInstance.registerHelper("utcTimestamp", () =>
     new Date().toISOString()
   );
