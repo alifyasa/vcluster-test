@@ -5,6 +5,7 @@ import path from "path";
 import { v4 } from "uuid";
 import { chmod, unlink, writeFile } from "fs/promises";
 import { execa } from "execa";
+import { syncBuiltinESMExports } from "module";
 
 const shellExecuteScriptSchema = z.object({
   script: z.string().transform((script) => script.trim()),
@@ -31,10 +32,12 @@ async function shellExecuteScript(
   if (execaResult.stdout) logger.info(execaResult.stdout);
   if (input.saveStdoutTo) {
     await writeFile(input.saveStdoutTo, execaResult.stdout || "");
-    logger.info(`Saved STDOUT to ${input.saveStdoutTo}`)
+    logger.info(`Saved STDOUT to ${input.saveStdoutTo}`);
+  }
+  if (execaResult.stderr) {
+    logger.error(execaResult.stderr);
   }
   if (execaResult.exitCode === -1) {
-    logger.error(execaResult.stderr);
     throw new Error(
       `Shell Execute exited with error code ${execaResult.exitCode}`
     );
