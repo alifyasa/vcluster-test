@@ -1,0 +1,19 @@
+hostCluster:
+  platformHost: ""
+  clusterId: ""
+  loftAccessKey: ""
+
+vcluster:
+  vclusterId: "vcluster-{{ shortId }}"
+  projectId: ""
+  kubeconfigPath: "{{ uuidv4 }}.yaml"
+  templateId:
+    before: ""
+    after: ""
+
+
+helmChart:
+  name: 
+    before: ""
+    after: ""
+  path: ""
