@@ -5,11 +5,10 @@ import path from "path";
 import { v4 } from "uuid";
 import { chmod, unlink, writeFile } from "fs/promises";
 import { execa } from "execa";
-import { syncBuiltinESMExports } from "module";
 
 const shellExecuteScriptSchema = z.object({
   script: z.string().transform((script) => script.trim()),
-  env: z.record(z.string()).optional(),
+  env: z.record(z.any().transform(anything => anything.toString())).optional(),
   saveStdoutTo: z.string().optional(),
 });
 
@@ -43,7 +42,7 @@ async function shellExecuteScript(
       `Shell Execute exited with error code ${execaResult.exitCode}`
     );
   }
-  
+
   await unlink(scriptPath);
 
   return execaResult;
