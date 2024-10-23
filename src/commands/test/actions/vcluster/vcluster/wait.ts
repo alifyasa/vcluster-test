@@ -29,7 +29,7 @@ async function vclusterWait(
 
   const endTime = Date.now() + timeoutMs;
   logger.info(
-    `Waiting vCluster ${vclusterId} to be in the phase ${waitUntilPhaseEquals} within ${timeoutMs}ms`
+    `Waiting for vCluster ${vclusterId} to reach the '${waitUntilPhaseEquals}' phase within ${timeoutMs}ms`
   );
 
   while (Date.now() < endTime) {

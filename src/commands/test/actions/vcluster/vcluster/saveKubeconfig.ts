@@ -68,7 +68,7 @@ async function vclusterSaveKubeconfig(
     );
   }
   await writeFile(input.savePath, kubeconfig)
-  logger.info(`Kubeconfig written successfully to ${input.savePath}!`);
+  logger.info(`Kubeconfig has been written successfully to ${input.savePath}`);
   return true;
 }
 
