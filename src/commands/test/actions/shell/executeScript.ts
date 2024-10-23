@@ -34,14 +34,16 @@ async function shellExecuteScript(
     await writeFile(input.saveStdoutTo, execaResult.stdout || "");
     logger.info(`Saved STDOUT to ${input.saveStdoutTo}`);
   }
-  if (execaResult.stderr) {
-    logger.error(execaResult.stderr);
+  if (execaResult.stderr && execaResult.exitCode !== -1) {
+    logger.warn(execaResult.stderr);
   }
   if (execaResult.exitCode === -1) {
+    logger.error(execaResult.stderr);
     throw new Error(
       `Shell Execute exited with error code ${execaResult.exitCode}`
     );
   }
+  
   await unlink(scriptPath);
 
   return execaResult;
