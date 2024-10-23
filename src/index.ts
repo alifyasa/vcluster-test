@@ -18,7 +18,7 @@ program
   .description("Run tests using the specified configuration file")
   .action(async (configPath: PathLike, valuesPath: PathLike | undefined) => {
     try {
-      const configContent = compileConfig(configPath, valuesPath)
+      const configContent = await compileConfig(configPath, valuesPath)
       logger.info(`Loaded configuration from ${configPath}`);
       logger.debug(JSON.stringify(configContent, null, 2));
       await testUsingConfig(configContent);
@@ -34,7 +34,7 @@ program
   .description("Compile configuration file with the values file")
   .action(async (configPath: PathLike, valuesPath: PathLike | undefined) => {
     try {
-      const configContent = compileConfig(configPath, valuesPath)
+      const configContent = await compileConfig(configPath, valuesPath)
       logger.info(JSON.stringify(configContent, null, 2));
     } catch (e) {
       const error = e as Error;

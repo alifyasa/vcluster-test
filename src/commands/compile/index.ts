@@ -46,6 +46,8 @@ async function compileConfig(configPath: PathLike, valuesPath: PathLike | undefi
   const configContent = yamlToJson(
     compileYaml(await readFile(configPath, "utf-8"), configValues)
   );
+  logger.debug(configValues)
+  logger.debug(configContent)
 
   return configContent;
 }
