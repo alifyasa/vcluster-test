@@ -48,7 +48,7 @@ async function vclusterList(
   } catch (e) {
     const error = e as AxiosError;
     throw new Error(
-      `Failed getting List of vClusters: ${JSON.stringify(
+      `Failed getting list of vClusters: ${JSON.stringify(
         error.toJSON(),
         null,
         2

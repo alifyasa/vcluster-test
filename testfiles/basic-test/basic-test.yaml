@@ -1,5 +1,4 @@
-name: "Basic Test for vCluster v21.0.0-beta.5"
-description: "Basic Test for vCluster v21.0.0-beta.5"
+name: "Basic Test for vCluster with template {{ vcluster.templateId }}"
 defaults:
   parameters:
     platformHost: "{{ hostCluster.platformHost }}"

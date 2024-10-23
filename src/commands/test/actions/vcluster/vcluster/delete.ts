@@ -45,7 +45,7 @@ async function vclusterDelete(
     logger.silly(JSON.stringify(axiosResponse.headers, null, 2));
     logger.silly(JSON.stringify(axiosResponse.data, null, 2));
     logger.info(
-      `Successfully Deleted vCluster ${input.vclusterId} in Project ${input.projectId}`
+      `Successfully Deleted vCluster ${input.vclusterId} in project ${input.projectId}`
     );
     return true;
   } catch (e) {

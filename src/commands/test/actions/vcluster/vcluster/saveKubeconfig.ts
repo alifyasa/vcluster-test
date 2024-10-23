@@ -64,7 +64,7 @@ async function vclusterSaveKubeconfig(
   } catch (e) {
     const error = e as AxiosError;
     throw new Error(
-      `Error getting KubeConfig: ${JSON.stringify(error.toJSON(), null, 2)}`
+      `Error getting kubeconfig: ${JSON.stringify(error.toJSON(), null, 2)}`
     );
   }
   await writeFile(input.savePath, kubeconfig)

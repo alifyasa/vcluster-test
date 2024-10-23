@@ -28,6 +28,9 @@ async function vclusterWait(
   } = vclusterWaitSchema.parse(parameters);
 
   const endTime = Date.now() + timeoutMs;
+  logger.info(
+    `Waiting vCluster ${vclusterId} to be in the phase ${waitUntilPhaseEquals} within ${timeoutMs}ms`
+  );
 
   while (Date.now() < endTime) {
     try {
@@ -40,7 +43,7 @@ async function vclusterWait(
 
       if (vcluster && vcluster.status.phase === waitUntilPhaseEquals) {
         logger.info(
-          `VCluster ${vclusterId} is in the desired phase: ${waitUntilPhaseEquals}`
+          `vCluster ${vclusterId} is in the desired phase: ${waitUntilPhaseEquals}`
         );
         return vcluster;
       }
@@ -52,7 +55,7 @@ async function vclusterWait(
   }
 
   throw new Error(
-    `Timeout: VCluster ${vclusterId} did not reach phase ${waitUntilPhaseEquals} within ${timeoutMs} ms.`
+    `Timeout: vCluster ${vclusterId} did not reach phase ${waitUntilPhaseEquals} within ${timeoutMs} ms.`
   );
 }
 

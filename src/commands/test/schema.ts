@@ -15,7 +15,7 @@ const TestStepSchemaWithCleanup = TestStepSchema.extend({
 
 const TestCommandSchema = z.object({
   name: z.string(),
-  description: z.string(),
+  description: z.string().optional(),
   steps: z.array(TestStepSchemaWithCleanup),
   defaults: z.object({
     parameters: TestActionParametersSchema,

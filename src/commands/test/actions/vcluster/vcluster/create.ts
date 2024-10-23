@@ -57,7 +57,7 @@ async function vclusterCreate(
     logger.silly(JSON.stringify(axiosResponse.headers, null, 2));
     logger.silly(JSON.stringify(axiosResponse.data, null, 2));
     logger.info(
-      `Successfully Created vCluster ${input.vclusterId} using Template ${input.templateId} in Project ${input.projectId}`
+      `Successfully Created vCluster ${input.vclusterId} using template ${input.templateId} in project ${input.projectId}`
     );
     return true;
   } catch (e) {
