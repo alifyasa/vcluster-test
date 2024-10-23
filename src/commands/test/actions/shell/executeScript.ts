@@ -22,8 +22,6 @@ async function shellExecuteScript(
   logger.debug(`Executing Script\n${input.script}`);
   const execaResult = await execa(scriptPath, {
     shell: true,
-    stdout: "inherit",
-    stderr: "inherit",
     env: {
       ...process.env,
       ...input.env,
