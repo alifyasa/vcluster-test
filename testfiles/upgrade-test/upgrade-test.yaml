@@ -98,7 +98,7 @@ steps:
   - name: "Wait vCluster Upgrade to Complete"
     action: "vcluster/vcluster/wait"
     parameters:
-      waitUntilPhaseEquals: "Running"
+      waitUntilPhaseEquals: "Ready"
       timeoutString: "15m"
       pollingIntervalMs: 300
   - name: "Install Helm Charts (Post-Upgrade)"
