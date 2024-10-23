@@ -19,7 +19,7 @@ async function shellExecuteScript(
   const scriptPath = path.join("/tmp", `${v4()}.sh`);
   await writeFile(scriptPath, input.script);
   await chmod(scriptPath, "755");
-  logger.info(`Executing Script\n${input.script}`);
+  logger.debug(`Executing Script\n${input.script}`);
   const execaResult = await execa(scriptPath, {
     shell: true,
     stdout: "inherit",
@@ -28,16 +28,16 @@ async function shellExecuteScript(
       ...input.env,
     },
   });
-  if (execaResult.stdout) logger.info(execaResult.stdout);
+  if (execaResult.stdout) logger.info(`Shell STDOUT\n${execaResult.stdout}`);
   if (input.saveStdoutTo) {
     await writeFile(input.saveStdoutTo, execaResult.stdout || "");
     logger.info(`Saved STDOUT to ${input.saveStdoutTo}`);
   }
   if (execaResult.stderr && execaResult.exitCode !== -1) {
-    logger.warn(execaResult.stderr);
+    logger.warn(`Shell STDERR\n${execaResult.stderr}`);
   }
   if (execaResult.exitCode === -1) {
-    logger.error(execaResult.stderr);
+    logger.error(`Shell STDERR\n${execaResult.stderr}`);
     throw new Error(
       `Shell Execute exited with error code ${execaResult.exitCode}`
     );

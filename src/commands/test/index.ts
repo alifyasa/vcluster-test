@@ -33,7 +33,7 @@ async function testUsingConfig(config: object) {
   try {
     for (const rollbackStep of rollbackSteps) {
       logger.info(
-        `Executing Step ${rollbackStep.name} (${rollbackStep.action})`
+        `Executing Step: ${rollbackStep.name} (${rollbackStep.action})`
       );
       const parameters = merge(
         commandConfig.defaults.parameters,
