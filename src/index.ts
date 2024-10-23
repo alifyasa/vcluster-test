@@ -35,7 +35,7 @@ program
   .action(async (configPath: PathLike, valuesPath: PathLike | undefined) => {
     try {
       const configContent = await compileConfig(configPath, valuesPath)
-      logger.info(JSON.stringify(configContent, null, 2));
+      logger.info(`Compiled Script\n${JSON.stringify(configContent, null, 2)}`);
     } catch (e) {
       const error = e as Error;
       logger.error(error.message);
