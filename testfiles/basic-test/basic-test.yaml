@@ -50,7 +50,7 @@ steps:
             #!/bin/sh
             chmod 600 $KUBECONFIG
             echo $KUBECONFIG
-            helm uninstall alifyasa-test-crd-beta-5
+            helm uninstall {{ helmChart.name }}
           env:
             KUBECONFIG: "{{ vcluster.kubeconfigPath }}"
   - name: "Wait for the resources to be Ready"
