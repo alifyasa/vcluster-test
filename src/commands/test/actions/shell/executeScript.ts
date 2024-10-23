@@ -8,8 +8,9 @@ import { execa } from "execa";
 
 const shellExecuteScriptSchema = z.object({
   script: z.string().transform((script) => script.trim()),
-  env: z.record(z.any().transform(anything => anything.toString())).optional(),
-  saveStdoutTo: z.string().optional(),
+  env: z
+    .record(z.any().transform((anything) => anything.toString()))
+    .optional(),
 });
 
 async function shellExecuteScript(
@@ -22,21 +23,14 @@ async function shellExecuteScript(
   logger.debug(`Executing Script\n${input.script}`);
   const execaResult = await execa(scriptPath, {
     shell: true,
+    stdout: "inherit",
+    stderr: "inherit",
     env: {
       ...process.env,
       ...input.env,
     },
   });
-  if (execaResult.stdout) logger.info(`Shell STDOUT\n${execaResult.stdout}`);
-  if (input.saveStdoutTo) {
-    await writeFile(input.saveStdoutTo, execaResult.stdout || "");
-    logger.info(`Saved STDOUT to ${input.saveStdoutTo}`);
-  }
-  if (execaResult.stderr && execaResult.exitCode !== -1) {
-    logger.warn(`Shell STDERR\n${execaResult.stderr}`);
-  }
   if (execaResult.exitCode === -1) {
-    logger.error(`Shell STDERR\n${execaResult.stderr}`);
     throw new Error(
       `Shell Execute exited with error code ${execaResult.exitCode}`
     );
