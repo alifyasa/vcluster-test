@@ -1,7 +1,7 @@
 import * as yaml from "js-yaml";
 import { logger } from "lib/logger";
 
-function yamlToJson(yamlString: string): object {
+function yamlToJson(yamlString: string): Record<string, any> {
   try {
     const data = yaml.load(yamlString);
     return data as object;
