@@ -59,7 +59,7 @@ steps:
       env:
         TIMEOUT: 30s
         NAMESPACE: default
-        SLEEP_TIME_SECONDS: 600
+        SLEEP_TIME_SECONDS: 300
         KUBECONFIG: "{{ vcluster.kubeconfigPath }}"
       script: |
         #!/bin/bash
